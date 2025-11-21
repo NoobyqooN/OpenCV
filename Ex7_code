@@ -1,0 +1,40 @@
+import cv2
+import numpy as np
+
+# Load the image
+img = cv2.imread('shapes.png') 
+if img is None:
+    print("Error: Image not found.")
+    exit()
+
+# Display the original image
+cv2.imshow('Original Image', img)
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Apply Canny edge detection to find edges
+canny = cv2.Canny(gray, 30, 200) # Adjust thresholds as needed
+
+# Display the Canny edges
+cv2.imshow('Canny Edges', canny)
+
+# Find contours in the Canny edge image
+# cv2.RETR_EXTERNAL retrieves only the outermost contours
+# cv2.CHAIN_APPROX_NONE stores all contour points
+contours, hierarchy = cv2.findContours(canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+print(f"Number of Contours Found: {len(contours)}")
+
+# Draw the found contours on the original image
+# -1 indicates drawing all contours
+# (0, 255, 0) is the color green in BGR format
+# 3 is the thickness of the contour lines
+cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
+
+# Display the image with contours drawn
+cv2.imshow('Contours', img)
+
+# Wait for a key press and then close all windows
+cv2.waitKey(0)
+cv2.destroyAllWindows()
